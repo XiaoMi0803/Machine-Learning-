@@ -36,7 +36,6 @@ table(train_v4$classe)
 # Built machine learning model
 ```{r}
 library(randomForest)
-model_rf <- train(classe ~ ., method="rf",data = train_v4)
 rfModel <- randomForest(classe ~ ., data =train_v4)
 ```
 
