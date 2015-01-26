@@ -108,6 +108,16 @@ ptest</code></pre>
 </div>
 <div id="write-answer-files" class="section level1">
 <h1>Write answer files</h1>
+<pre class="r"><code>answers &lt;- as.vector(ptest)
+pml_write_files = function(x) {
+  n = length(x)
+  for (i in 1:n) {
+    filename = paste0(&quot;problem_id_&quot;, i, &quot;.txt&quot;)
+    write.table(x[i], file = filename, quote = FALSE, row.names = FALSE, 
+                col.names = FALSE)
+  }
+}
+pml_write_files(answers)</code></pre>
 </div>
 
 
