@@ -39,3 +39,24 @@ library(randomForest)
 model_rf <- train(classe ~ ., method="rf",data = train_v4)
 rfModel <- randomForest(classe ~ ., data =train_v4)
 ```
+
+# Prediction
+```{r}
+ptest <- predict(rfModel, test)
+ptest
+```
+
+# Write answer files
+```{r,echo=FALSE}
+answers <- as.vector(ptest)
+pml_write_files = function(x) {
+  n = length(x)
+  for (i in 1:n) {
+    filename = paste0("problem_id_", i, ".txt")
+    write.table(x[i], file = filename, quote = FALSE, row.names = FALSE, 
+                col.names = FALSE)
+  }
+}
+pml_write_files(answers)
+```
+
