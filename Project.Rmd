@@ -1,0 +1,41 @@
+---
+title: "Machine Learning Course Project"
+author: "Y. Guo"
+date: "January 25, 2015"
+output: html_document
+---
+
+# Background
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
+
+# Read data
+```{r}
+# Set working directory
+setwd("/Users/Yanshu/Desktop/coursera/Machine Learning")
+# reading test and train data sets
+test<-read.csv("./pml-testing.csv")
+train<-read.csv("./pml-training.csv",na.strings=c("NA",""))
+```
+
+# Clean data
+```{r}
+# Discard columns with NAs
+library(caret)
+NAs<-apply(train,2,function(x){sum(is.na(x))})
+train_v2<-train[,which(NAs==0)]
+# Exclude near zero variance features
+nzvcol <- nearZeroVar(train_v2)
+train_v3 <- train_v2[, -nzvcol]
+# Exclude descriptive columns
+descriptcol<-c("X", "user_name", "raw_timestamp_part_1", "raw_timestamp_part_2", 
+               "cvtd_timestamp", "new_window", "num_window")
+train_v4<-train_v3[,!names(train_v3) %in% descriptcol]
+table(train_v4$classe)
+```
+
+# Built machine learning model
+```{r}
+library(randomForest)
+model_rf <- train(classe ~ ., method="rf",data = train_v4)
+rfModel <- randomForest(classe ~ ., data =train_v4)
+```
